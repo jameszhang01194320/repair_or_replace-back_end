@@ -20,7 +20,8 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(
 # allows  front-end domain to access the API
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Replace with your front-end URL
-    "https://frontendwebversion.vercel.app",
+    # "https://frontendwebversion.vercel.app",
+    "https://frontend-repair.vercel.app",
 ]
 
 
