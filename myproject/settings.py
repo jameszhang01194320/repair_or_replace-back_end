@@ -15,15 +15,33 @@ load_dotenv()
 SECRET_KEY = os.environ.get('SECRET_KEY')
 AUTH_KEY = os.environ.get("AUTH_KEY")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(
-    " ") if os.environ.get("ALLOWED_HOSTS") else ['127.0.0.1', 'localhost']
-# allows  front-end domain to access the API
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Replace with your front-end URL
-    # "https://frontendwebversion.vercel.app",
-    "https://frontend-repair.vercel.app",
-]
 
+# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(
+#     " ") if os.environ.get("ALLOWED_HOSTS") else ['127.0.0.1', 'localhost']
+# # allows  front-end domain to access the API
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",  # Replace with your front-end URL
+#     # "https://frontendwebversion.vercel.app",
+#     "https://frontend-repair.vercel.app",
+# ]
+ALLOWED_HOSTS = ['.onrender.com', '.vercel.app', 'localhost', '127.0.0.1']
+
+# 把 repair 的前端域名放进来（按你的截图）
+CSRF_TRUSTED_ORIGINS = ['https://frontend-repair.vercel.app']
+
+# 登录需要携带 Cookie → 允许带凭证的 CORS，且精确白名单
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = ['https://frontend-repair.vercel.app']
+CORS_ALLOW_CREDENTIALS = True
+
+# 跨站 XHR 要让浏览器发送/接收 Cookie
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE  = 'None'
+
+# 反代后识别 HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -42,10 +60,10 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',    
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
